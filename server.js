@@ -26,9 +26,9 @@ const multerConfig = {
             const ext = file.mimetype.split('/')[1];
             cb(null, file.fieldname + '-' + Date.now() + '.' + ext); // Testing everything up to here and its working
         }
-    }), // end of diskStorage, still in multerConfig
+    }),
     // filter out and prevent non-image files.
-    fileFilter: function(req, file, next) { // I think something in here is making not work
+    fileFilter: function(req, file, next) {
         if (!file) { // if its not a file??
             next();
         }
