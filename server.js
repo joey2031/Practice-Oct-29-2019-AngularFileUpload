@@ -17,10 +17,6 @@ const port = process.env.PORT || 3000;
 app.use(bodyParser.urlencoded({ extended: false })); //handle body requests
 app.use(bodyParser.json());
 
-//let's declare a public static folder, 
-// this is where our client side static files/output go
-app.use('/', express.static(__dirname + '/public'));
-
 
 //MULTER CONFIG: to get file photos to temp server storage
 const multerConfig = {
