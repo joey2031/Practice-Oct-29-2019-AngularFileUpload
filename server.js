@@ -55,8 +55,6 @@ const multerConfig = {
 
 };
 
-//let upload = multer({ storage: storage });
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
