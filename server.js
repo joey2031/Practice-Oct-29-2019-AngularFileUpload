@@ -1,19 +1,25 @@
-// Some notes: In the tutorial the import for FileUploader is wrong, the right path is used in my code
-// He decides to use nodemon. I installed it to, in the futuore we can uninstall it and just use node
-// Don't worry about CORS, it just used to allow the browser to accept something comming from an  external source.
-// Not sure why he imported FileSelectDirective and never used it- After some testing might take it out.
-const path = require('path');
-const fs = require('fs');
-const express = require('express');
-const multer = require('multer');
-const bodyParser = require('body-parser')
-const app = express();
-const router = express.Router();
+// src: https://medium.com/@TheJesseLewis/how-to-make-a-basic-html-form-file-upload-using-multer-in-an-express-node-js-app-16dac2476610
+// mimetypes: https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Complete_list_of_MIME_types
+// RUN PACKAGES
+const express = require('express'); //app router
+const multer = require('multer'); // file storing middleware
+const bodyParser = require('body-parser'); //cleans our req.body
+var path = require("path");
 
-const DIR = './uploads';
 const PDF = 'application/pdf';
 const image = 'image/jpeg';
 let fileAllowed = false;
+
+// SETUP APP
+const app = express();
+const port = process.env.PORT || 3000;
+app.use(bodyParser.urlencoded({ extended: false })); //handle body requests
+app.use(bodyParser.json());
+
+//let's declare a public static folder, 
+// this is where our client side static files/output go
+app.use('/', express.static(__dirname + '/public'));
+
 
 //MULTER CONFIG: to get file photos to temp server storage
 const multerConfig = {
@@ -23,7 +29,7 @@ const multerConfig = {
 
         //specify destination
         destination: function(req, file, next) {
-            next(null, DIR);
+            next(null, './public'); // when I put a folder that dosent exist its suspose to make it but it crashes
         },
 
         //specify the filename to be unique
@@ -63,10 +69,6 @@ const multerConfig = {
     }
 };
 
-let upload = multer({ storage: multerConfig }); // might not need this just say multer(multerConfig).single('photo') in app.post
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(function(req, res, next) { // this is to handel cors.
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
@@ -76,27 +78,19 @@ app.use(function(req, res, next) { // this is to handel cors.
     next();
 });
 
-app.get('/api', function(req, res) {
-    res.end('file catcher example');
+
+//Route 1: serve up the homepage
+app.get('/', function(req, res) {
+    res.sendFile(path.join(__dirname, './index.html'));
 });
 
-app.post('/api/upload', upload.single('photo'), function(req, res) {
-    if (!req.file) {
-        console.log("No file received");
-        return res.send({
-            success: false
-        });
-
-    } else {
-        console.log('file received');
-        return res.send({
-            success: true
-        })
-    }
+//Route 2 (post): serve up the file handling solution (it really needs a better user response solution. 
+//If you try uploading anything but an image it will still say 'complete' though won't actually upload it). 
+app.post('/upload', multer(multerConfig).single('photo'), function(req, res) {
+    res.send('Complete!');
 });
+// Please note the .single method calls ('photo'), and that 'photo' is the name of our file-type input field!
 
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, function() {
-    console.log('Node.js server is running on port ' + PORT);
+app.listen(port, function() {
+    console.log(`Server listening on port ${port}`);
 });
