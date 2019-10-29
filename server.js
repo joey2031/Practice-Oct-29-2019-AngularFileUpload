@@ -83,7 +83,7 @@ app.get('/', function(req, res) {
 
 //Route 2 (post): serve up the file handling solution (it really needs a better user response solution. 
 //If you try uploading anything but an image it will still say 'complete' though won't actually upload it). 
-app.post('/upload', multer(multerConfig).single('photo'), function(req, res) {
+app.post('api/upload', multer(multerConfig).single('photo'), function(req, res) {
     res.send('Complete!');
 });
 // Please note the .single method calls ('photo'), and that 'photo' is the name of our file-type input field!
