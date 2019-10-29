@@ -1,5 +1,7 @@
+// app.component.ts
+
 import { Component, OnInit } from '@angular/core';
-import {  FileUploader, FileSelectDirective } from 'ng2-file-upload/ng2-file-upload';
+import { FileUploader, FileSelectDirective } from 'ng2-file-upload'; //Original line  import {  FileUploader, FileSelectDirective } from 'ng2-file-upload/ng2-file-upload';
 
 const URL = 'http://localhost:3000/api/upload';
 
@@ -11,13 +13,13 @@ const URL = 'http://localhost:3000/api/upload';
 export class AppComponent implements OnInit {
   title = 'app';
 
-  public uploader: FileUploader = new FileUploader({url: URL, itemAlias: 'photo'});
+  public uploader: FileUploader = new FileUploader({ url: URL, itemAlias: 'photo' });
 
   ngOnInit() {
     this.uploader.onAfterAddingFile = (file) => { file.withCredentials = false; };
     this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
-         console.log('ImageUpload:uploaded:', item, status, response);
-         alert('File uploaded successfully');
-     };
- }
+      console.log('ImageUpload:uploaded:', item, status, response);
+      alert('File uploaded successfully');
+    };
+  }
 }
