@@ -23,7 +23,7 @@ const multerConfig = {
 
         //specify destination
         destination: function(req, file, next) {
-            next(null, DIR); // when I put a folder that dosent exist its suspose to make it but it crashes
+            next(null, DIR);
         },
 
         //specify the filename to be unique
