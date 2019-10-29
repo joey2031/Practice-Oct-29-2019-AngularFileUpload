@@ -11,6 +11,9 @@ const app = express();
 const router = express.Router();
 
 const DIR = './uploads';
+const PDF = 'application/pdf';
+const image = 'image/jpeg';
+let fileAllowed = false;
 
 const multerConfig = {
     storage: multer.diskStorage({
@@ -21,9 +24,16 @@ const multerConfig = {
             console.log(file);
             //get the file mimetype ie 'image/jpeg' split and prefer the second value ie'jpeg'
             const ext = file.mimetype.split('/')[1];
-            cb(null, file.fieldname + '-' + Date.now() + '.' + ext);
+            cb(null, file.fieldname + '-' + Date.now() + '.' + ext); // Testing everything up to here and its working
         }
-    })
+    }), // end of siskStorage, still in multerConfig
+    fileFilter: function(req, file, next) {
+        if (!file) {
+            next();
+        }
+
+    }
+
 };
 
 //let upload = multer({ storage: storage });
