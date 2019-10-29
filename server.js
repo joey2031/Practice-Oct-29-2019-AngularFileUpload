@@ -18,7 +18,10 @@ const multerConfig = {
             cb(null, DIR);
         },
         filename: (req, file, cb) => {
-            cb(null, file.fieldname + '-' + Date.now() + '.' + path.extname(file.originalname));
+            console.log(file);
+            //get the file mimetype ie 'image/jpeg' split and prefer the second value ie'jpeg'
+            const ext = file.mimetype.split('/')[1];
+            cb(null, file.fieldname + '-' + Date.now() + '.' + ext);
         }
     })
 };
