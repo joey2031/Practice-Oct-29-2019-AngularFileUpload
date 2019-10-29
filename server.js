@@ -30,6 +30,7 @@ const multerConfig = {
     fileFilter: function(req, file, next) { // when I added this it stoped working
         if (!file) {
             next();
+            console.log("Inside the if");
         }
         console.log("In file filter");
     }
