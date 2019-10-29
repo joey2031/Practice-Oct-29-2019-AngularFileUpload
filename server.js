@@ -26,12 +26,12 @@ const multerConfig = {
             const ext = file.mimetype.split('/')[1];
             cb(null, file.fieldname + '-' + Date.now() + '.' + ext); // Testing everything up to here and its working
         }
-    }), // end of siskStorage, still in multerConfig
-    fileFilter: function(req, file, next) {
+    }), // end of diskStorage, still in multerConfig
+    fileFilter: function(req, file, next) { // when I added this it stoped working
         if (!file) {
             next();
         }
-
+        console.log("In file filter");
     }
 
 };
