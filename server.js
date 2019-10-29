@@ -1,23 +1,33 @@
-// src: https://medium.com/@TheJesseLewis/how-to-make-a-basic-html-form-file-upload-using-multer-in-an-express-node-js-app-16dac2476610
-// mimetypes: https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Complete_list_of_MIME_types
-// RUN PACKAGES
-const express = require('express'); //app router
-const multer = require('multer'); // file storing middleware
-const bodyParser = require('body-parser'); //cleans our req.body
-var path = require("path");
+// Some notes: In the tutorial the import for FileUploader is wrong, the right path is used in my code
+// He decides to use nodemon. I installed it to, in the futuore we can uninstall it and just use node
+// Don't worry about CORS, it just used to allow the browser to accept something comming from an  external source.
+// Not sure why he imported FileSelectDirective and never used it- After some testing might take it out.
+const path = require('path');
+const fs = require('fs');
+const express = require('express');
+const multer = require('multer');
+const bodyParser = require('body-parser')
+const app = express();
+const router = express.Router();
 
 const DIR = './uploads';
-const PDF = 'application/pdf';
-const image = 'image/jpeg';
-let fileAllowed = false;
 
-console.log("la la la")
+const multerConfig = {
+    storage: multer.diskStorage({
+        destination: (req, file, cb) => {
+            cb(null, DIR);
+        },
+        filename: (req, file, cb) => {
+            cb(null, file.fieldname + '-' + Date.now() + '.' + path.extname(file.originalname));
+        }
+    })
+};
 
-// SETUP APP
-const app = express();
-const port = process.env.PORT || 3000;
-app.use(bodyParser.urlencoded({ extended: false })); //handle body requests
+//let upload = multer({ storage: storage });
+
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 app.use(function(req, res, next) { // this is to handel cors.
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
     res.setHeader('Access-Control-Allow-Methods', 'POST');
@@ -26,68 +36,27 @@ app.use(function(req, res, next) { // this is to handel cors.
     next();
 });
 
+app.get('/api', function(req, res) {
+    res.end('file catcher example');
+});
 
+app.post('/api/upload', multer(multerConfig).single('photo'), function(req, res) {
+    if (!req.file) {
+        console.log("No file received");
+        return res.send({
+            success: false
+        });
 
-//MULTER CONFIG: to get file photos to temp server storage
-const multerConfig = {
-
-    //specify diskStorage (another option is memory)
-    storage: multer.diskStorage({
-
-        //specify destination
-        destination: function(req, file, next) {
-            next(null, DIR); // when I put a folder that dosent exist its suspose to make it but it crashes
-        },
-
-        //specify the filename to be unique
-        filename: function(req, file, next) {
-            console.log(file);
-            //get the file mimetype ie 'image/jpeg' split and prefer the second value ie'jpeg'
-            const ext = file.mimetype.split('/')[1];
-            //set the file fieldname to a unique name containing the original name, current datetime and the extension.
-            next(null, file.fieldname + '-' + Date.now() + '.' + ext);
-        }
-    }),
-
-    // filter out and prevent non-image files.
-    fileFilter: function(req, file, next) {
-        if (!file) { // if its not a file??
-            next();
-        }
-        console.log(file.mimetype); //instead of extenssions we can just use the mimetypes 
-
-        // only permit image mimetypes
-        //  const image = file.mimetype.startsWith('image/');
-
-        if (file.mimetype.startsWith(PDF) || file.mimetype.startsWith(image)) {
-            fileAllowed = true;
-        } else {
-            fileAllowed = false;
-        }
-
-        if (fileAllowed) {
-            console.log('photo uploaded');
-            next(null, true);
-        } else {
-            console.log("file not supported")
-                //TODO:  A better message response to user on failure.
-            return next();
-        }
+    } else {
+        console.log('file received');
+        return res.send({
+            success: true
+        })
     }
-};
-
-//Route 1: serve up the homepage
-app.get('/', function(req, res) {
-    res.sendFile(path.join(__dirname, './index.html'));
 });
 
-//Route 2 (post): serve up the file handling solution (it really needs a better user response solution. 
-//If you try uploading anything but an image it will still say 'complete' though won't actually upload it). 
-app.post('api/upload', multer(multerConfig).single('photo'), function(req, res) {
-    res.send('Complete!');
-});
-// Please note the .single method calls ('photo'), and that 'photo' is the name of our file-type input field!
+const PORT = process.env.PORT || 3000;
 
-app.listen(port, function() {
-    console.log(`Server listening on port ${port}`);
+app.listen(PORT, function() {
+    console.log('Node.js server is running on port ' + PORT);
 });
