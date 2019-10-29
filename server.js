@@ -6,6 +6,7 @@ const multer = require('multer'); // file storing middleware
 const bodyParser = require('body-parser'); //cleans our req.body
 var path = require("path");
 
+const DIR = './uploads';
 const PDF = 'application/pdf';
 const image = 'image/jpeg';
 let fileAllowed = false;
@@ -29,7 +30,7 @@ const multerConfig = {
 
         //specify destination
         destination: function(req, file, next) {
-            next(null, './public'); // when I put a folder that dosent exist its suspose to make it but it crashes
+            next(null, DIR); // when I put a folder that dosent exist its suspose to make it but it crashes
         },
 
         //specify the filename to be unique
