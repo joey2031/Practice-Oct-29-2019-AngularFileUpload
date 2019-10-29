@@ -11,11 +11,21 @@ const PDF = 'application/pdf';
 const image = 'image/jpeg';
 let fileAllowed = false;
 
+console.log("la la la")
+
 // SETUP APP
 const app = express();
 const port = process.env.PORT || 3000;
 app.use(bodyParser.urlencoded({ extended: false })); //handle body requests
 app.use(bodyParser.json());
+app.use(function(req, res, next) { // this is to handel cors.
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
+    res.setHeader('Access-Control-Allow-Methods', 'POST');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    next();
+});
+
 
 
 //MULTER CONFIG: to get file photos to temp server storage
@@ -65,16 +75,6 @@ const multerConfig = {
         }
     }
 };
-
-
-app.use(function(req, res, next) { // this is to handel cors.
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
-    res.setHeader('Access-Control-Allow-Methods', 'POST');
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-    res.setHeader('Access-Control-Allow-Credentials', true);
-    next();
-});
-
 
 //Route 1: serve up the homepage
 app.get('/', function(req, res) {
