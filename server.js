@@ -27,12 +27,30 @@ const multerConfig = {
             cb(null, file.fieldname + '-' + Date.now() + '.' + ext); // Testing everything up to here and its working
         }
     }), // end of diskStorage, still in multerConfig
-    fileFilter: function(req, file, next) { // when I added this it stoped working
-        if (!file) {
+    // filter out and prevent non-image files.
+    fileFilter: function(req, file, next) { // I think something in here is making not work
+        if (!file) { // if its not a file??
             next();
-            console.log("Inside the if");
         }
-        console.log("In file filter");
+        console.log(file.mimetype); //instead of extenssions we can just use the mimetypes 
+
+        // only permit image mimetypes
+        //  const image = file.mimetype.startsWith('image/');
+
+        if (file.mimetype.startsWith(PDF) || file.mimetype.startsWith(image)) {
+            fileAllowed = true;
+        } else {
+            fileAllowed = false;
+        }
+
+        if (fileAllowed) {
+            console.log('photo uploaded');
+            next(null, true);
+        } else {
+            console.log("file not supported")
+                //TODO:  A better message response to user on failure.
+            return next();
+        }
     }
 
 };
