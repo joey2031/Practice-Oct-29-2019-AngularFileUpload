@@ -44,10 +44,12 @@ const multerConfig = {
 
         if (fileAllowed) {
             console.log('photo uploaded');
+            alert("photo uploaded");
             next(null, true);
         } else {
-            console.log("file not supported")
-                //TODO:  A better message response to user on failure.
+            console.log("file not supported");
+            alert("file not supported");
+            //TODO:  A better message response to user on failure.
             return next();
         }
     }
