@@ -33,9 +33,6 @@ const multerConfig = {
         }
         console.log(file.mimetype); //instead of extenssions we can just use the mimetypes 
 
-        // only permit image mimetypes
-        //  const image = file.mimetype.startsWith('image/');
-
         if (file.mimetype.startsWith(PDF) || file.mimetype.startsWith(image)) {
             fileAllowed = true;
         } else {
@@ -47,7 +44,6 @@ const multerConfig = {
             next(null, true);
         } else {
             console.log("file not supported");
-            //TODO:  A better message response to user on failure.
             return next();
         }
     }

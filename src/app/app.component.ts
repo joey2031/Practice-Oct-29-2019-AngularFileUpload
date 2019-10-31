@@ -1,7 +1,7 @@
 // app.component.ts
 
 import { Component, OnInit } from '@angular/core';
-import { FileUploader, FileSelectDirective } from 'ng2-file-upload'; //Original line  import {  FileUploader, FileSelectDirective } from 'ng2-file-upload/ng2-file-upload';
+import { FileUploader } from 'ng2-file-upload'; //Original line  import {  FileUploader, FileSelectDirective } from 'ng2-file-upload/ng2-file-upload';
 
 const URL = 'http://localhost:3000/api/upload';
 
