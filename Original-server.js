@@ -1,7 +1,3 @@
-// Some notes: In the tutorial the import for FileUploader is wrong, the right path is used in my code
-// He decides to use nodemon. I installed it to, in the futuore we can uninstall it and just use node
-// Don't worry about CORS, it just used to allow the browser to accept something comming from an  external source.
-// Not sure why he imported FileSelectDirective and never used it- After some testing might take it out.
 const path = require('path');
 const fs = require('fs');
 const express = require('express');

@@ -1,6 +1,5 @@
-// Some notes: In the tutorial the import for FileUploader is wrong, the right path is used in my code
 // Don't worry about CORS, it just used to allow the browser to accept something comming from an  external source.
-// Not sure why he imported FileSelectDirective and never used it- After some testing might take it out.
+// This is the working server.js, Original-server.js is the original code that does not check the file type.
 const path = require('path');
 const fs = require('fs');
 const express = require('express');
