@@ -24,9 +24,15 @@ const multerConfig = {
             const ext = file.mimetype.split('/')[1];
             cb(null, file.fieldname + '-' + Date.now() + '.' + ext); // Testing everything up to here and its working
         }
+<<<<<<< HEAD
     }),
     // filter out and prevent non-image files.
     fileFilter: function(req, file, next) {
+=======
+    }), 
+    // filter out and prevent non-image files.
+    fileFilter: function(req, file, next) { 
+>>>>>>> 097412c71db98d90083b51627d16c6c24997c13d
         if (!file) { // if its not a file??
             next();
         }
